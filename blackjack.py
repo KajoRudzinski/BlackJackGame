@@ -7,6 +7,28 @@ except ImportError:  # python 2 scenario
 
 main_window = tk.Tk()
 
+
+def load_card_images(card_images):
+    suits = ["heart", "club", "diamond", "spade"]
+    face_cards = ["jack", "queen", "king"]
+    extension = "ppm"
+
+    # retrieve the image of the card for each suit
+    for suit in suits:
+        # number cards
+        for card in range(1, 11):
+            name = "img_cards/{}_{}.{}".format(str(card), suit, extension)
+            image = tk.PhotoImage(file=name)
+            # store value and image in tuple
+            card_images.append((card, image,))
+        # face cards
+        for card in face_cards:
+            name = "img_cards/{}_{}.{}".format(str(card), suit, extension)
+            image = tk.PhotoImage(file=name)
+            # store value and image in tuple
+            card_images.append((10, image,))
+
+
 # screen and frames for dealer and player
 main_window.title("Black Jack")
 main_window.geometry("640x480")
