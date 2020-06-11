@@ -54,7 +54,22 @@ def get_hand_score(hand):
 
 
 def deal_dealer():
-    deal_card(dealer_card_frame)
+    dealer_score = get_hand_score(dealer_hand)
+    # Dealer will draw cards automatically until it's score is 17
+    while 0 < dealer_score < 17:
+        dealer_hand.append(deal_card(dealer_card_frame))
+        dealer_score = get_hand_score(dealer_hand)
+        dealer_score_label.set(dealer_score)
+
+    player_score = get_hand_score(player_hand)
+    if player_score > 21:
+        result_text.set("Dealer wins")
+    elif dealer_score > 21 or dealer_score < player_score:
+        result_text.set("Player wins")
+    elif dealer_score > player_score:
+        result_text.set("Dealer wins")
+    else:
+        result_text.set("It's a draw!")
 
 
 def deal_player():
@@ -130,7 +145,11 @@ deck = list(cards)
 random.shuffle(deck)
 
 # create the list to store the dealer's and player's hands
-dealer_card = []
+dealer_hand = []
 player_hand = []
+
+deal_player()
+dealer_hand.append(deal_card(dealer_card_frame))
+deal_player()
 
 main_window.mainloop()
