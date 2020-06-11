@@ -5,8 +5,6 @@ try:
 except ImportError:  # python 2 scenario
     import Tkinter as tk
 
-main_window = tk.Tk()
-
 
 def load_card_images(card_images):
     suits = ["heart", "club", "diamond", "spade"]
@@ -29,9 +27,29 @@ def load_card_images(card_images):
             card_images.append((10, image,))
 
 
+def deal_card(frame):
+    # pop the next card of the top (0) of the deck
+    next_card = deck.pop(0)
+    tk.Label(frame, image=next_card[1], relief="raised")\
+        .pack(side="left")
+    return next_card
+
+
+def deal_dealer():
+    deal_card(dealer_card_frame)
+
+
+def deal_player():
+    deal_card(player_card_frame)
+
+
+main_window = tk.Tk()
+
 # screen and frames for dealer and player
 main_window.title("Black Jack")
 main_window.geometry("640x480")
+main_window.configure(bg="green")
+
 
 result_text = tk.StringVar()
 result = tk.Label(main_window, textvariable=result_text)
@@ -72,11 +90,11 @@ button_frame = tk.Frame(main_window)
 button_frame.grid(row=3, column=0, columnspan=3, sticky="w")
 
 # button dealer
-dealer_button = tk.Button(button_frame, text="Dealer")
+dealer_button = tk.Button(button_frame, text="Dealer", command=deal_dealer)
 dealer_button.grid(row=0, column=0)
 
 # button player
-player_button = tk.Button(button_frame, text="Player")
+player_button = tk.Button(button_frame, text="Player", command=deal_player)
 player_button.grid(row=0, column=1)
 
 # load cards
@@ -88,5 +106,8 @@ print(cards)
 deck = list(cards)
 random.shuffle(deck)
 
+# create the list to store the dealer's and player's hands
+dealer_card = []
+player_card = []
 
 main_window.mainloop()
