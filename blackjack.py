@@ -30,6 +30,8 @@ def load_card_images(card_images):
 def deal_card(frame):
     # pop the next card of the top (0) of the deck
     next_card = deck.pop(0)
+    # and add it back to the deck at the bottom
+    deck.append(next_card)
     tk.Label(frame, image=next_card[1], relief="raised")\
         .pack(side="left")
     return next_card
@@ -78,6 +80,33 @@ def deal_player():
     player_score_label.set(player_score)
     if player_score > 21:
         result_text.set("Dealer wins")
+
+
+def new_game():
+    global dealer_card_frame
+    global player_card_frame
+    global dealer_hand
+    global player_hand
+    dealer_card_frame.destroy()
+    dealer_card_frame = tk.Frame(card_frame, bg="green")
+    dealer_card_frame.grid(row=0, column=1, sticky="ew", rowspan=2)
+
+    player_card_frame = tk.Frame(card_frame, bg="green")
+    player_card_frame.grid(row=2, column=1, sticky="ew", rowspan=2)
+
+    result_text.set("")
+    # create the list to store the dealer's and player's hands
+    dealer_hand = []
+    player_hand = []
+
+    deal_player()
+    dealer_hand.append(deal_card(dealer_card_frame))
+    dealer_score_label.set(get_hand_score(dealer_hand))
+    deal_player()
+
+
+def shuffle():
+    random.shuffle(deck)
 
 
 main_window = tk.Tk()
@@ -135,6 +164,12 @@ dealer_button.grid(row=0, column=0)
 player_button = tk.Button(button_frame, text="Player", command=deal_player)
 player_button.grid(row=0, column=1)
 
+new_game_button = tk.Button(button_frame, text="New Game", command=new_game)
+new_game_button.grid(row=0, column=2)
+
+shuffle_button = tk.Button(button_frame, text="Shuffle", command=shuffle)
+shuffle_button.grid(row=0, column=3)
+
 # load cards
 cards = []
 load_card_images(cards)
@@ -142,14 +177,12 @@ print(cards)
 
 # create a new deck of cards and shuffle them
 deck = list(cards)
-random.shuffle(deck)
+shuffle()
 
 # create the list to store the dealer's and player's hands
 dealer_hand = []
 player_hand = []
 
-deal_player()
-dealer_hand.append(deal_card(dealer_card_frame))
-deal_player()
+new_game()
 
 main_window.mainloop()
