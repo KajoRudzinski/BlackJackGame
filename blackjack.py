@@ -40,8 +40,23 @@ def deal_dealer():
 
 
 def deal_player():
-    deal_card(player_card_frame)
-
+    global player_score
+    global player_ace_is_11
+    card_value = deal_card(player_card_frame)[0]
+    if card_value == 1 and not player_ace_is_11:
+        player_ace_is_11 = True
+        card_value = 11
+    player_score += card_value
+    # if we bust, check if there is an ace and subtract
+    # because ace can be equal to 1 or 11 depending what player wants
+    # but 2 aces equal to 11 would be 22, so, bust by default
+    if player_score > 21 and player_ace_is_11:
+        player_score -= 10
+        player_ace_is_11 = False
+    player_score_label.set(player_score)
+    if player_score > 21:
+        result_text.set("Dealer wins")
+    print(locals())
 
 main_window = tk.Tk()
 
@@ -74,6 +89,9 @@ dealer_card_frame.grid(row=0, column=1, sticky="ew", rowspan=2)
 
 # player
 player_score_label = tk.IntVar()
+player_score = 0
+player_ace_is_11 = False
+
 tk.Label(
     card_frame, text="Player", bg="green", fg="white") \
     .grid(row=2, column=0)
