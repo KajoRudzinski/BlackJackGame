@@ -79,4 +79,14 @@ dealer_button.grid(row=0, column=0)
 player_button = tk.Button(button_frame, text="Player")
 player_button.grid(row=0, column=1)
 
+# load cards
+cards = []
+load_card_images(cards)
+print(cards)
+
+# create a new deck of cards and shuffle them
+deck = list(cards)
+random.shuffle(deck)
+
+
 main_window.mainloop()
